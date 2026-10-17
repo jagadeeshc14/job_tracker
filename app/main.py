@@ -1,5 +1,6 @@
 from fastapi import FastAPI, HTTPException, Depends
 from fastapi.security import OAuth2PasswordRequestForm
+from fastapi.responses import RedirectResponse
 from pydantic import BaseModel, ConfigDict, Field
 from sqlalchemy.orm import Session
 from typing import Optional
@@ -13,6 +14,10 @@ from .database import engine, get_db
 models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Job Tracker API")
+
+@app.get("/", include_in_schema=False)
+def home():
+    return RedirectResponse("/docs")
 
 class UserIn(BaseModel):
     username: str = Field(min_length=3)
